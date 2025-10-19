@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>LunarisMC</title>
+    <link rel="stylesheet" href="styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:700,400&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="bg-aura"></div>
+    <canvas id="stars"></canvas>
+    <div class="container">
+        <div class="logo-box">
+            <img src="logo.png" alt="Logo LunarisMC" class="logo">
+        </div>
+        <h1 class="brand-title">LunarisMC</h1>
+        <p class="subtitle">Servidor de Minecraft Java</p>
+        <div class="ip-section">
+            <span>IP del servidor:</span>
+            <code id="server-ip">luanris.falixsrv.me</code>
+            <div class="copy-btn-row">
+                <button class="copy-btn" onclick="copyIP()" title="Copiar IP">
+                    Copiar IP
+                </button>
+                <span id="copy-msg"></span>
+            </div>
+        </div>
+        <nav class="nav-buttons">
+            <a href="https://discord.gg/udXzF9sDF7" target="_blank" class="nav-btn">Discord</a>
+            <a href="#" class="nav-btn disabled">Tienda</a>
+            <a href="https://wiki.lunarisnetwork.net" target="_blank" class="nav-btn">Wiki</a>
+            <a href="https://twitter.com/tuusuario" target="_blank" class="nav-btn">Twitter</a>
+            <a href="https://youtube.com/@lunarismcnet?si=DLmuFycidu2Ob1ml" target="_blank" class="nav-btn">YouTube</a>
+            <a href="https://tiktok.com/@tuusuario" target="_blank" class="nav-btn">TikTok</a>
+        </nav>
+        <footer>
+            <hr>
+            <p>&copy; 2025 LunarisMC — No oficial de Mojang</p>
+        </footer>
+    </div>
+    <script>
+        function copyIP() {
+            const ip = document.getElementById('server-ip').textContent;
+            navigator.clipboard.writeText(ip);
+            const msg = document.getElementById('copy-msg');
+            msg.textContent = "¡Copiado!";
+            setTimeout(() => { msg.textContent = ""; }, 1400);
+        }
+
+        // Estrellas: distribuidas y con transparencia según la altura
+        const canvas = document.getElementById('stars');
+        if (canvas) {
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            const ctx = canvas.getContext('2d');
+            let starCount = Math.floor(window.innerWidth * window.innerHeight / 2300);
+            function genStars() {
+                let stars = [];
+                for (let i = 0; i < starCount; i++) {
+                    stars.push({
+                        x: Math.random() * canvas.width,
+                        y: Math.random() * canvas.height,
+                        r: Math.random() * 1.8 + 0.7
+                    });
+                }
+                return stars;
+            }
+
+            let stars = genStars();
+
+            function drawStars() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                for (let s of stars) {
+                    let op = 1 - (s.y / canvas.height) * 0.92;
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, s.r, 0, 2 * Math.PI);
+                    ctx.fillStyle = `rgba(191,156,255,${op})`;
+                    ctx.shadowColor = "#a174ff";
+                    ctx.shadowBlur = 8;
+                    ctx.fill();
+                }
+            }
+            drawStars();
+
+            window.addEventListener('resize', () => {
+                starCount = Math.floor(window.innerWidth * window.innerHeight / 2300);
+                resizeCanvas();
+                stars = genStars();
+                drawStars();
+            });
+        }
+    </script>
+</body>
+</html>
